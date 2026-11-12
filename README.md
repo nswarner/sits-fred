@@ -1,5 +1,22 @@
 # sits-fred
-This is a fork of the SITS fred software after updating the software to run on Apple Silicon Macs 27.0.1. If you're unfamiliar with fred, please see https://www.sits.lu/fred
+
+This is a fork of the SITS fred software after updating the software to run on Apple Silicon Macs 27.0.1. If you're unfamiliar with fred, please see https://www.sits.lu/fred. I will not be updating this software beyond what exists here, you are welcome to fork it and continue with upstream updates.
+
+I am preserving the content of the older README, only noting that the sections 2.1.2 and 2.3.3 are deprecated, and that the proper build information for Apple Silicon Macs is located in 3.0 onward. The 1.0.0 release from SITS did not include a Mac binary, nor did the build scripts support the "mac" platform. That is why you'll notice manually building with qmake rather than the autogen script. All information provided for 3.0 has been tested on the following system:
+
+* M4 Mac Air
+* Mac OS 27.0.1
+* XCode Command Line Tools Version: 27.0.0.0.1788430756
+* Homebrew qt@5 5.15.19 (deprecated, Homebrew will be disabling this in 2027)
+* Homebrew Hivex 1.3.25
+* Homebrew ocaml 5.5.2
+* Homebrew pkgconf 3.0.10
+* Homebrew autoconf 1.20
+* Homebrew libtool 2.6.2
+* Homebrew gettext 1.0
+
+Anything outside of this was previously installed.
+
 
 # Table of contents
 
@@ -257,7 +274,7 @@ to build on Apple Silicon Mac.
         '--platform=mac'. Use the steps below instead.
 
 ## 3.1 Modifications
-    This copy of fred was modified by <YOUR NAME> on 2026-11-12 so that it
+    This copy of fred was modified by Nicholas Stephen Warner on 2026-11-12 so that it
     builds against Qt 5.15 as packaged by Homebrew:
 
     - The report viewer (src/dlgreportviewer.*) uses QTextBrowser instead of
@@ -283,33 +300,43 @@ to build on Apple Silicon Mac.
     QtScript, which was removed in Qt 6.
 
 ## 3.4 Build
-    1. Install the prerequisites:
 
-       $ xcode-select --install
-       $ brew install qt@5 hivex
+1. Install the prerequisites:
 
-    2. Put Qt 5's qmake first in your PATH (qt@5 is "keg-only", so Homebrew
+```BASH
+xcode-select --install
+brew install qt@5 hivex ocaml libxml2 pkgconf autoconf automake libtool gettext
+```
+
+2. Put Qt 5's qmake first in your PATH (qt@5 is "keg-only", so Homebrew
        does not link it for you) and locate hivex:
 
-       $ export PATH="$(brew --prefix qt@5)/bin:$PATH"
-       $ HIVEX="$(brew --prefix hivex)"
-       $ qmake --version
+```BASH
+export PATH="$(brew --prefix qt@5)/bin:$PATH"
+HIVEX="$(brew --prefix hivex)"
+qmake --version
+```
 
        The last command must report Qt version 5.15.x.
 
-    3. Configure and build from the fred source directory. Do not use
+3. Configure and build from the fred source directory. Do not use
        autogen.sh on macOS:
 
-       $ qmake fred.pro "INCLUDEPATH+=$HIVEX/include" "LIBS+=-L$HIVEX/lib"
-       $ make -j"$(sysctl -n hw.ncpu)"
+```BASH
+qmake fred.pro "INCLUDEPATH+=$HIVEX/include" "LIBS+=-L$HIVEX/lib"
+make -j"$(sysctl -n hw.ncpu)"
+```
 
        The application is created as build/fred.app. These warnings can be
        ignored: "The selected platform is no longer supported by libc++" and
-       "linking with dylib ... which was built for newer version".
+       "linking with dylib ... which was built for newer version". Generally,
+       it should build properly despite plenty of warnings.
 
-    4. Run it:
+4. Run it:
 
-       $ open build/fred.app
+```BASH
+open build/fred.app
+```
 
        The app links against Homebrew's Qt and hivex, so it only runs while
        those remain installed. To start over, run "make distclean".
@@ -319,8 +346,11 @@ to build on Apple Silicon Mac.
     report" dialog is empty at first. Copy them to fred's default user
     location:
 
-       $ mkdir -p ~/.fred/report_templates
-       $ cp -R report_templates/. ~/.fred/report_templates/
+```BASH
+mkdir -p ~/.fred/report_templates
+cp -R report_templates/. ~/.fred/report_templates/
+```
 
     Alternatively, add the report_templates folder of the source tree under
     Preferences > Reports. Reopen the "Generate report" dialog afterwards.
+
