@@ -2,6 +2,8 @@
 
 This is a fork of the SITS fred software after updating the software to run on Apple Silicon Macs 27.0.1. If you're unfamiliar with fred, please see https://www.sits.lu/fred. I will not be updating this software beyond what exists here, you are welcome to fork it and continue with upstream updates.
 
+All credit for the creation of fred software goes to the original creator(s) and current maintainer(s). This was a minimal effort to get fred to work again on Mac after support for Mac was dropped in the 1.0.0 release. 
+
 I am preserving the content of the older README, only noting that the sections 2.1.2 and 2.3.3 are deprecated, and that the proper build information for Apple Silicon Macs is located in 3.0 onward. The 1.0.0 release from SITS did not include a Mac binary, nor did the build scripts support the "mac" platform. That is why you'll notice manually building with qmake rather than the autogen script. All information provided for 3.0 has been tested on the following system:
 
 * M4 Mac Air
@@ -15,7 +17,7 @@ I am preserving the content of the older README, only noting that the sections 2
 * Homebrew libtool 2.6.2
 * Homebrew gettext 1.0
 
-Anything outside of this was previously installed.
+Anything needed outside of this was previously installed.
 
 
 # Table of contents
@@ -268,36 +270,29 @@ to build on Apple Silicon Mac.
         so just ignore it.
 
 # 3.0 Addendum: Building on macOS with Homebrew (unofficial)
-  NOTE: This addendum was added to a modified copy of fred and is not part of
-        the official SITS release. Section 2.3.3 above describes an older
-        process that no longer works: autogen.sh does not support
-        '--platform=mac'. Use the steps below instead.
+
+NOTE: This addendum was added to a modified copy of fred and is not part of the official SITS release. Section 2.3.3 above describes an older process that no longer works: autogen.sh does not support '--platform=mac'. Use the steps below instead.
 
 ## 3.1 Modifications
-    This copy of fred was modified by Nicholas Stephen Warner on 2026-11-12 so that it
-    builds against Qt 5.15 as packaged by Homebrew:
 
-    - The report viewer (src/dlgreportviewer.*) uses QTextBrowser instead of
-      QWebEngineView, because Homebrew's qt@5 no longer ships QtWebEngine.
-      Reports are shown as basic HTML; JavaScript and advanced CSS in report
-      output are not supported.
-    - fred.pro no longer requests the "webenginewidgets" Qt module.
+This copy of fred was modified by Nicholas Stephen Warner on 2026-11-12 so that it builds against Qt 5.15 as packaged by Homebrew:
+
+* The report viewer (src/dlgreportviewer.*) uses QTextBrowser instead of QWebEngineView, because Homebrew's qt@5 no longer ships QtWebEngine. Reports are shown as basic HTML; JavaScript and advanced CSS in report output are not supported.
+* fred.pro no longer requests the "webenginewidgets" Qt module.
 
 ## 3.2 Tested configuration
-    Apple Silicon Mac, Xcode Command Line Tools, Homebrew qt@5 5.15.19 and
-    Homebrew hivex.
+
+Apple Silicon Mac, Xcode Command Line Tools, Homebrew qt@5 5.15.19 and Homebrew hivex.
 
 ## 3.3 Important: Qt 5 is end-of-life
-    Qt 5 is no longer supported upstream. Homebrew has deprecated the qt@5
-    formula and, according to "brew info qt@5", will disable it on
-    2027-05-19. After that date it can no longer be installed with brew, so
-    install it beforehand. An already installed copy should keep working.
-    Pinning prevents "brew upgrade" from changing it:
 
-    $ brew pin qt@5
+Qt 5 is no longer supported upstream. Homebrew has deprecated the qt@5 formula and, according to "brew info qt@5", will disable it on 2027-05-19. After that date it can no longer be installed with brew, so install it beforehand. An already installed copy should keep working. Pinning prevents "brew upgrade" from changing it:
 
-    Porting fred to Qt 6 is not trivial: the report engine relies on
-    QtScript, which was removed in Qt 6.
+```BASH
+brew pin qt@5
+```
+
+Porting fred to Qt 6 is not trivial: the report engine relies on QtScript, which was removed in Qt 6. I will not be performing this work.
 
 ## 3.4 Build
 
@@ -308,8 +303,7 @@ xcode-select --install
 brew install qt@5 hivex ocaml libxml2 pkgconf autoconf automake libtool gettext
 ```
 
-2. Put Qt 5's qmake first in your PATH (qt@5 is "keg-only", so Homebrew
-       does not link it for you) and locate hivex:
+2. Put Qt 5's qmake first in your PATH (qt@5 is "keg-only", so Homebrew does not link it for you) and locate hivex:
 
 ```BASH
 export PATH="$(brew --prefix qt@5)/bin:$PATH"
@@ -317,20 +311,16 @@ HIVEX="$(brew --prefix hivex)"
 qmake --version
 ```
 
-       The last command must report Qt version 5.15.x.
+The last command must report Qt version 5.15.x.
 
-3. Configure and build from the fred source directory. Do not use
-       autogen.sh on macOS:
+3. Configure and build from the fred source directory. Do not use autogen.sh on macOS:
 
 ```BASH
 qmake fred.pro "INCLUDEPATH+=$HIVEX/include" "LIBS+=-L$HIVEX/lib"
 make -j"$(sysctl -n hw.ncpu)"
 ```
 
-       The application is created as build/fred.app. These warnings can be
-       ignored: "The selected platform is no longer supported by libc++" and
-       "linking with dylib ... which was built for newer version". Generally,
-       it should build properly despite plenty of warnings.
+The application is created as build/fred.app. These warnings can be ignored: "The selected platform is no longer supported by libc++" and "linking with dylib ... which was built for newer version". Generally, it should build properly despite plenty of warnings. I will not be fixing the warnings.
 
 4. Run it:
 
@@ -338,19 +328,16 @@ make -j"$(sysctl -n hw.ncpu)"
 open build/fred.app
 ```
 
-       The app links against Homebrew's Qt and hivex, so it only runs while
-       those remain installed. To start over, run "make distclean".
+The app links against Homebrew's Qt and hivex, so it only runs while those remain installed. To start over, run "make distclean".
 
 ## 3.5 Report templates
-    The build does not install the report templates, so the "Generate
-    report" dialog is empty at first. Copy them to fred's default user
-    location:
+
+The build does not install the report templates, so the "Generate report" dialog is empty at first. Copy them to fred's default user location:
 
 ```BASH
 mkdir -p ~/.fred/report_templates
 cp -R report_templates/. ~/.fred/report_templates/
 ```
 
-    Alternatively, add the report_templates folder of the source tree under
-    Preferences > Reports. Reopen the "Generate report" dialog afterwards.
+Alternatively, add the report_templates folder of the source tree under Preferences > Reports. Reopen the "Generate report" dialog afterwards.
 
