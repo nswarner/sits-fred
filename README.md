@@ -9,7 +9,7 @@ This is a fork of the SITS fred software after updating the software to run on A
 * 2.0 Installation instructions
   * 2.1 Prerequisits
     * 2.1.1 Linux
-    * 2.1.2 Mac OSX (See section 3)
+    * 2.1.2 Mac OSX (Deprecated, see section 3)
     * 2.1.3 Windows
   * 2.2 Installing a prebuild binary package
   * 2.3 Installing from source
@@ -17,7 +17,7 @@ This is a fork of the SITS fred software after updating the software to run on A
     * 2.3.2 Linux
       * 2.3.2.1 Prerequisites
       * 2.3.2.2 Compilation and installation
-    * 2.3.3 Mac OSX
+    * 2.3.3 Mac OSX (Deprecated, see section 3)
       * 2.3.3.1 Prerequisites
       * 2.3.3.2 Compiling
     * 2.3.4 Crosscompiling for Windows
@@ -87,7 +87,7 @@ This is a fork of the SITS fred software after updating the software to run on A
 ### 2.1.1 Linux
       Any Linux with Qt v5.x libraries.
 
-### 2.1.2 Mac OSX
+### 2.1.2 Mac OSX (Deprecated, see section 3)
       OSX v10.5 or above with Qt v5.x libraries.
 
 ### 2.1.3 Windows
@@ -155,7 +155,7 @@ This is a fork of the SITS fred software after updating the software to run on A
         $ ./autogen.sh --static-hivex --platform=linux
         $ make install
 
-### 2.3.3 Mac OSX (Deprecated, See 3.0)
+### 2.3.3 Mac OSX (Deprecated, see section 3)
 
 Section kept for historical record, but section is deprecated. See section 3.0
 to build on Apple Silicon Mac.
