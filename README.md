@@ -1,5 +1,7 @@
 # sits-fred
 
+TLDR: If you ended up here, you likely want [the `fred` build process for Mac, section 3.0](https://github.com/nswarner/sits-fred#30-addendum-building-on-macos-with-homebrew-unofficial).
+
 This is a fork of the SITS fred software after updating the software to run on Apple Silicon Macs 27.0.1. If you're unfamiliar with fred, please see https://www.sits.lu/fred. I will not be updating this software beyond what exists here, you are welcome to fork it and continue with upstream updates.
 
 All credit for the creation of fred software goes to the original creator(s) and current maintainer(s). This was a minimal effort to get fred to work again on Mac after support for Mac was dropped in the 1.0.0 release. 
