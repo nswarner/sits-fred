@@ -1,0 +1,6 @@
+fred (1.0.0) stable; urgency=low
+
+  * Replaced all obsolete Qt5 functions.
+
+ -- Gillen Daniel <development@sits.lu>  Thu, 21 Mar 2024 19:00:00 +0100
+ 
